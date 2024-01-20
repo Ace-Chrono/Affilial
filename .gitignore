@@ -1,0 +1,30 @@
+# Eclipse project files
+.metadata/
+bin/
+tmp/
+.settings/
+.classpath
+.project
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# User-specific files
+*.suo
+*.user
+*.swp
+
+# macOS
+.DS_Store
