@@ -9,9 +9,11 @@
 
 .chart-series-line{
 	-fx-stroke-width: 2px;
+	-fx-stroke: #0598ff;
 }
-.default-color0.chart-series-line{-fx-stroke: #0598ff}
-.default-color0.chart-line-symbol{-fx-background-color: #0598ff, #ffffff}
+.chart-line-symbol {
+    -fx-background-color: transparent;
+}
 
 .default-color0.chart-pie { -fx-pie-color: #0598ff; }
 .default-color1.chart-pie { -fx-pie-color: #0475c4; }

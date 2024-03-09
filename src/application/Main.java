@@ -27,7 +27,7 @@ public class Main extends Application {
 			//String css = this.getClass().getResource("application.css").toExternalForm();
 			//scene.getStylesheets().add(css);
 			stage.setScene(scene);
-			stage.setResizable(false);
+			stage.setResizable(true);
 			stage.show();
 			
 			stage.setOnCloseRequest(event -> {

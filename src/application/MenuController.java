@@ -10,10 +10,19 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -31,6 +40,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -239,6 +249,7 @@ public class MenuController implements Initializable{
     	dateJoinedColumn.setCellValueFactory(new PropertyValueFactory<>("dateJoined"));
     	
     	partnerDataTable.setItems(addPartnersListD); //Error here
+    	addPartnersSearch();
     }
     
     public void addPartnersSelect()
@@ -310,8 +321,46 @@ public class MenuController implements Initializable{
         			prepare.setString(7, contacterPhoneNumberField.getText());
         			prepare.setString(8, contacterEmailField.getText());
         			prepare.setString(9, String.valueOf(dateJoinedField.getValue()));
-        			
         			prepare.executeUpdate();
+        			
+        			String sortData = "SELECT * FROM partners ORDER BY TIMESTAMP(dateJoined)";
+                    result = statement.executeQuery(sortData);
+                    int newPartnerId = 1;
+                    while (result.next()) {
+                        int partnerId = result.getInt("partnerId");
+                        
+                        // Check if the newPartnerId already exists, if so, find the next available unique id
+                        while (isPartnerIdExists(newPartnerId, connect)) {
+                            newPartnerId++;
+                        }
+
+                        String updateData = "UPDATE partners SET partnerId = ? WHERE partnerId = ?";
+                        prepare = connect.prepareStatement(updateData);
+                        prepare.setInt(1, newPartnerId++);
+                        prepare.setInt(2, partnerId);
+                        prepare.executeUpdate();
+                    }
+
+                    result = statement.executeQuery(sortData);
+                    newPartnerId = 1;
+                    boolean fixBug = false;
+                    boolean bugChecker = true;
+                    while (result.next()) {
+                        int partnerId = result.getInt("partnerId");
+                        if (partnerId != 1 && bugChecker)
+                        {
+                        	fixBug = true;
+                        	bugChecker = false;
+                        }
+                        if (fixBug)
+                        {
+                        	String updateData = "UPDATE partners SET partnerId = ? WHERE partnerId = ?";
+                            prepare = connect.prepareStatement(updateData);
+                            prepare.setInt(1, newPartnerId++);
+                            prepare.setInt(2, partnerId);
+                            prepare.executeUpdate();
+                        }
+                    }
         			
         			alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Information Message");
@@ -326,6 +375,20 @@ public class MenuController implements Initializable{
     		
     	}catch(Exception e) {e.printStackTrace();}
     	
+    }
+    
+    private boolean isPartnerIdExists(int partnerId, Connection connection) throws SQLException {
+        String checkData = "SELECT COUNT(*) FROM partners WHERE partnerId = ?";
+        try (PreparedStatement checkStatement = connection.prepareStatement(checkData)) {
+            checkStatement.setInt(1, partnerId);
+            try (ResultSet checkResult = checkStatement.executeQuery()) {
+                if (checkResult.next()) {
+                    int count = checkResult.getInt(1);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
     }
 
 	public void addPartnersClear()
@@ -382,6 +445,45 @@ public class MenuController implements Initializable{
     				statement = connect.createStatement();
         			statement.executeUpdate(updateData);
         			
+        			String sortData = "SELECT * FROM partners ORDER BY TIMESTAMP(dateJoined)";
+                    result = statement.executeQuery(sortData);
+                    int newPartnerId = 1;
+                    while (result.next()) {
+                        int partnerId = result.getInt("partnerId");
+                        
+                        // Check if the newPartnerId already exists, if so, find the next available unique id
+                        while (isPartnerIdExists(newPartnerId, connect)) {
+                            newPartnerId++;
+                        }
+
+                        String reSort = "UPDATE partners SET partnerId = ? WHERE partnerId = ?";
+                        prepare = connect.prepareStatement(reSort);
+                        prepare.setInt(1, newPartnerId++);
+                        prepare.setInt(2, partnerId);
+                        prepare.executeUpdate();
+                    }
+
+                    result = statement.executeQuery(sortData);
+                    newPartnerId = 1;
+                    boolean fixBug = false;
+                    boolean bugChecker = true;
+                    while (result.next()) {
+                        int partnerId = result.getInt("partnerId");
+                        if (partnerId != 1 && bugChecker)
+                        {
+                        	fixBug = true;
+                        	bugChecker = false;
+                        }
+                        if (fixBug)
+                        {
+                        	String reSort = "UPDATE partners SET partnerId = ? WHERE partnerId = ?";
+                            prepare = connect.prepareStatement(reSort);
+                            prepare.setInt(1, newPartnerId++);
+                            prepare.setInt(2, partnerId);
+                            prepare.executeUpdate();
+                        }
+                    }
+        			
         			alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Information Message");
         			alert.setHeaderText(null);
@@ -432,8 +534,15 @@ public class MenuController implements Initializable{
     			
     			if (option.get().equals(ButtonType.OK))
     			{
-    				statement = connect.createStatement();
-    				statement.executeUpdate(deleteData);
+    				int deletedPartnerId = partnerDataTable.getSelectionModel().getSelectedItem().getPartnerId();
+
+                    // Execute the DELETE statement
+                    statement = connect.createStatement();
+                    statement.executeUpdate(deleteData);
+
+                    // Update the remaining rows with partnerId greater than the deletedPartnerId
+                    String updateData = "UPDATE partners SET partnerId = partnerId - 1 WHERE partnerId > " + deletedPartnerId;
+                    statement.executeUpdate(updateData);
     				
     				alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Information Message");
@@ -457,7 +566,6 @@ public class MenuController implements Initializable{
     	FilteredList<partnerData> filter = new FilteredList<>(addPartnersListD, e-> true);
     	
     	searchButton.textProperty().addListener((Observable, oldValue, newValue) -> {
-    		
     		filter.setPredicate(predicatePartnerData ->{
     			
     			if(newValue == null || newValue.isEmpty())
@@ -487,6 +595,7 @@ public class MenuController implements Initializable{
     	
     	sortList.comparatorProperty().bind(partnerDataTable.comparatorProperty());
     	partnerDataTable.setItems(sortList);
+
     }
     
     public void updateAccount()
@@ -627,6 +736,7 @@ public class MenuController implements Initializable{
     		LocalDate startDate = null;
             LocalDate endDate = null;
     		boolean firstDataPoint = true;
+    		int daysDifference = 0;
     		
     		Set<String> addedDates = new HashSet<>();
     		
@@ -647,6 +757,7 @@ public class MenuController implements Initializable{
                         String inBetweenDate = startDate.format(formatter);
                         chart.getData().add(new XYChart.Data<>(inBetweenDate, partnerId-1));
                         startDate = startDate.plusDays(1);
+                        daysDifference++;
                     }
                 }
     			
@@ -660,7 +771,143 @@ public class MenuController implements Initializable{
     				chart.getData().add(new XYChart.Data<>(xValue, partnerId));
     			}
     		}
+    		for (XYChart.Data<String, Number> data : chart.getData()) {
+                Node node = data.getNode();
+                if (node != null) {
+                    node.setStyle("-fx-background-color: blue;");
+                }
+            }
 
+            if (daysDifference >= 365) {
+            	Map<String, Integer> yearCounts = new HashMap<>();
+            	
+            	try
+            	{
+            		prepare = connect.prepareStatement(sql);
+            		result = prepare.executeQuery();
+            		while (result.next())
+            		{
+            			Date date = result.getDate("dateJoined");
+                        Year year = Year.from(date.toLocalDate());
+                        String yearString = year.toString();
+                        yearCounts.put(yearString, yearCounts.getOrDefault(yearString, 0) + 1);
+            		}
+            	} catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        		
+                chart.getData().clear();
+
+                for (Map.Entry<String, Integer> entry : yearCounts.entrySet()) {
+                    chart.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                }
+                
+                chart.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
+                List<XYChart.Data<String, Number>> dataList = new ArrayList<>(chart.getData());
+            	int previousCount = 0; 
+            	String previousX = "";
+            	int index = 0;
+            	for (XYChart.Data<String, Number> data : chart.getData()) {
+            	    String xValue = data.getXValue();
+            	    int yValue = data.getYValue().intValue();
+            	    data.setYValue(yValue + previousCount);
+            	    
+            	    if (previousX != null && !previousX.isEmpty()) {
+            	        int yearDifference = Integer.parseInt(xValue.substring(0, 4)) - Integer.parseInt(previousX.substring(0, 4));
+            	        for (int i = 1; i < yearDifference; i++) {
+            	            int year = Integer.parseInt(previousX.substring(0, 4)) + i;
+            	            String newDateString = String.valueOf(year);
+            	            XYChart.Data<String, Number> newDataPoint = new XYChart.Data<>(newDateString, previousCount);
+            	            dataList.add(index, newDataPoint);
+            	            index++;
+            	        }
+            	    }
+            	    previousCount += yValue;
+            	    previousX = xValue;
+            	}
+            	dataList.sort(Comparator.comparing(XYChart.Data::getXValue));
+
+            	chart.getData().clear();
+            	chart.getData().addAll(dataList);
+            } 
+            else if (daysDifference >= 90) {
+            	Map<String, Integer> monthCounts = new HashMap<>();
+            	
+            	try
+            	{
+            		prepare = connect.prepareStatement(sql);
+            		result = prepare.executeQuery();
+            		while (result.next())
+            		{
+            			Date date = result.getDate("dateJoined");
+            			String monthString = new SimpleDateFormat("yyyy-MM").format(date);
+            			monthCounts.put(monthString, monthCounts.getOrDefault(monthString, 0) + 1);
+            		}
+	
+            	} catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        		
+                chart.getData().clear();
+
+                for (Map.Entry<String, Integer> entry : monthCounts.entrySet()) {
+
+                    chart.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                }
+                
+                chart.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
+                List<XYChart.Data<String, Number>> dataList = new ArrayList<>(chart.getData());
+            	int previousCount = 0; 
+            	String previousX = "";
+            	int index = 0;
+            	for (XYChart.Data<String, Number> data : chart.getData()) {
+            	    String xValue = data.getXValue();
+            	    int yValue = data.getYValue().intValue();
+            	    data.setYValue(yValue + previousCount);
+
+            	    if (previousX != null && !previousX.isEmpty()) {
+            	        int yearDifference = Integer.parseInt(xValue.substring(0, 4)) - Integer.parseInt(previousX.substring(0, 4));
+            	        int monthDifference = Integer.parseInt(xValue.substring(5, 7)) - Integer.parseInt(previousX.substring(5, 7));
+
+            	        for (int i = 1; i < yearDifference; i++) {
+            	            int year = Integer.parseInt(previousX.substring(0, 4)) + i;
+            	            for (int j = 1; j <= 12; j++) {
+            	                String newDateString = String.format("%04d-%02d", year, j);
+            	                XYChart.Data<String, Number> newDataPoint = new XYChart.Data<>(newDateString, previousCount);
+            	                dataList.add(index, newDataPoint);
+            	                index++;
+            	            }
+            	        }
+
+            	        for (int i = 1; i < monthDifference; i++) {
+            	            int month = Integer.parseInt(previousX.substring(5, 7)) + i;
+            	            if (month > 12) {
+            	                month -= 12;
+            	                int year = Integer.parseInt(previousX.substring(0, 4)) + 1;
+            	                String newDateString = String.format("%04d-%02d", year, month);
+            	                XYChart.Data<String, Number> newDataPoint = new XYChart.Data<>(newDateString, previousCount);
+            	                dataList.add(index, newDataPoint);
+            	                index++;
+            	            } else {
+            	                String newDateString = String.format("%04d-%02d", Integer.parseInt(previousX.substring(0, 4)), month);
+            	                XYChart.Data<String, Number> newDataPoint = new XYChart.Data<>(newDateString, previousCount);
+            	                dataList.add(index, newDataPoint);
+            	                index++;
+            	            }
+            	        }
+            	    }
+
+            	    previousCount += yValue;
+            	    previousX = xValue;
+            	}
+            	dataList.sort(Comparator.comparing(XYChart.Data::getXValue));
+
+            	chart.getData().clear();
+            	chart.getData().addAll(dataList);
+            } 
+
+            totalPartnersChart.setAnimated(false);
+            totalPartnersChart.setLegendVisible(false);
     		totalPartnersChart.getData().add(chart);
     		
     	}catch(Exception e) {e.printStackTrace();}
@@ -669,21 +916,24 @@ public class MenuController implements Initializable{
     public void homeDisplayOrganizationTypeChart()
     {
     	organizationTypePieChart.getData().clear();
+
     	
     	String sql = "SELECT organizationType, COUNT(*) AS partnerId FROM partners GROUP BY organizationType";
     	
     	connect = Database.connectDb();
     	
     	try {
-    		
+    		List<PieChart.Data> dataList = new ArrayList<>();
     		prepare = connect.prepareStatement(sql);
     		result = prepare.executeQuery();
     		
     		while (result.next())
     		{
-    			organizationTypePieChart.getData().add(new PieChart.Data(result.getString("organizationType"), result.getInt("partnerId")));
+    			dataList.add(new PieChart.Data(result.getString("organizationType"), result.getInt("partnerId")));
     		}
-    		
+        	//organizationTypePieChart.setAnimated(false);
+        	organizationTypePieChart.getData().addAll(dataList);
+        	
     	}catch(Exception e) {e.printStackTrace();}
     }
     
@@ -833,8 +1083,8 @@ public class MenuController implements Initializable{
 		dashboard.setDisable(false);
 		accountInfo.setDisable(true);
 		dataTable.setDisable(true);
-		//homeDisplayTotalPartnersChart();
-		//homeDisplayOrganizationTypeChart();
+		homeDisplayTotalPartnersChart();
+		homeDisplayOrganizationTypeChart();
 		homeDisplayPartnerAmount();
 		homeDisplayFundsAvailable();
 		homeDisplayEmployeesAvailable();
@@ -871,7 +1121,6 @@ public class MenuController implements Initializable{
 		dataTable.setDisable(true);
 		addPartnersShowListData();
 		homeDisplayTotalPartnersChart();
-		addPartnersSearch();
 		homeDisplayOrganizationTypeChart();
 		homeDisplayPartnerAmount();
 		homeDisplayFundsAvailable();
