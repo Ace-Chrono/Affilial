@@ -12,6 +12,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -36,6 +37,79 @@
                <graphic>
                   <FontAwesomeIcon fill="WHITE" glyphName="BARS" size="4em" text="" translateY="1.0" />
                </graphic></Button>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="sidebar2" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" translateX="-300.0">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="80.0" prefHeight="1000.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#openDashboard" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textAlignment="JUSTIFY" textFill="WHITE">
+                     <font>
+                        <Font size="37.0" />
+                     </font>
+                     <graphic>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard" translateX="-35.0">
+                           <font>
+                              <Font size="37.0" />
+                           </font></Text>
+                     </graphic></Button>
+                  <Button fx:id="dataTableButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textFill="WHITE">
+                     <font>
+                        <Font size="37.0" />
+                     </font>
+                     <graphic>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Database" translateX="-10.0">
+                           <font>
+                              <Font size="37.0" />
+                           </font>
+                        </Text>
+                     </graphic></Button>
+                  <Button fx:id="accountInfoButton" layoutX="10.0" layoutY="85.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textFill="WHITE">
+                     <font>
+                        <Font size="37.0" />
+                     </font>
+                     <graphic>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Account" translateX="-55.0">
+                           <font>
+                              <Font size="37.0" />
+                           </font>
+                        </Text>
+                     </graphic></Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="sidebar1" layoutY="80.0" prefHeight="1000.0" prefWidth="80.0" style="-fx-background-color: #0069b3;">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="990.0" prefWidth="80.0" spacing="20.0" style="-fx-background-color: #0069b3;" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Button fx:id="dashboardIcon" mnemonicParsing="false" onAction="#openDashboard" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="HOME" size="4em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="dataTableIcon" layoutX="20.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="PENCIL" size="4em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="AccountIcon" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="USER" size="4em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="HelpIcon" layoutX="20.0" layoutY="170.0" mnemonicParsing="false" onAction="#openHelpPage" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="INFO" size="4em" />
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+            <Button fx:id="logoutButton" alignment="CENTER" layoutX="12.0" layoutY="940.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;" textFill="#0598ff" AnchorPane.bottomAnchor="10.0">
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="SIGN_OUT" size="4em" wrappingWidth="48.0" />
+               </graphic>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="dashboard" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" visible="false">
@@ -101,7 +175,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataTable" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="dataTable" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" visible="false">
          <children>
             <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="640.0" prefWidth="1812.0" stylesheets="@menu.css">
                <styleClass>
@@ -188,7 +262,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="accountInfo" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="accountInfo" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
          <children>
             <AnchorPane layoutX="931.0" layoutY="118.0" prefHeight="868.0" prefWidth="895.0" stylesheets="@menu.css">
                <styleClass>
@@ -196,7 +270,7 @@
                   <String fx:value="white-bg" />
                </styleClass>
                <children>
-                  <Text layoutX="37.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Need Support? Contact us at example@gmail.com or at our phone number 000-000-0000. We will be there to support you and answer any questions you may have " wrappingWidth="821.1640625">
+                  <Text layoutX="37.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Need help with your account? Contact us at richardszhao@gmail.com or at our phone number 704-771-8143. We will be there to support you and answer any questions you may have " wrappingWidth="821.1640625">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -245,72 +319,66 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="sidebar2" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" translateX="-300.0">
+      <AnchorPane fx:id="helpPage" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="80.0" prefHeight="1000.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutX="14.0" layoutY="118.0" prefHeight="868.0" prefWidth="1812.0" stylesheets="@menu.css">
+               <styleClass>
+                  <String fx:value="shadow" />
+                  <String fx:value="white-bg" />
+               </styleClass>
                <children>
-                  <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#openDashboard" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textAlignment="JUSTIFY" textFill="WHITE">
+                  <Text layoutX="25.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How do I edit my database?" wrappingWidth="1765.0">
                      <font>
-                        <Font size="37.0" />
+                        <Font size="30.0" />
                      </font>
-                     <graphic>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard" translateX="-35.0">
-                           <font>
-                              <Font size="37.0" />
-                           </font></Text>
-                     </graphic></Button>
-                  <Button fx:id="dataTableButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textFill="WHITE">
+                  </Text>
+                  <Text layoutX="23.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How do I change my account credentials?" wrappingWidth="1765.0">
                      <font>
-                        <Font size="37.0" />
+                        <Font size="29.0" />
                      </font>
-                     <graphic>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Database" translateX="-10.0">
-                           <font>
-                              <Font size="37.0" />
-                           </font>
-                        </Text>
-                     </graphic></Button>
-                  <Button fx:id="accountInfoButton" layoutX="10.0" layoutY="85.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0280d9;" textFill="WHITE">
+                  </Text>
+                  <Text layoutX="24.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are 4 main functions to help you edit your database. To update any partners info, click on their row in the database to bring up their info in the input boxes. Here, change whatever info you would like to change, and then press &quot;update&quot; to change the info. To add a partner, create totally new info in the input boxes or click on a row in the database to re-use old info, and then press &quot;add&quot;. Make sure that the name of the partner is different, or else you will not be able to add the info. To delete a partner's info, press on the row in the database, and press &quot;delete&quot;. If you want to clear the info in the input boxes to make all these other functions quicker, press &quot;clear&quot;." wrappingWidth="1765.0">
                      <font>
-                        <Font size="37.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Account" translateX="-55.0">
-                           <font>
-                              <Font size="37.0" />
-                           </font>
-                        </Text>
-                     </graphic></Button>
+                  </Text>
+                  <Text layoutX="23.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to the accounts tab on the left side of the screen. Here you can enter in a new username or password and update your credentials. You must use the new credentials, and the old ones will not work anymore. " wrappingWidth="1765.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="23.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How do I contact customer support?" wrappingWidth="1765.0">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="25.0" layoutY="396.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If you require further assistance, contact us at richardszhao@gmail.com or at our phone number 704-771-8143. We will be there to support you and answer any questions you may have " wrappingWidth="1765.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="messageChatbot" layoutX="25.0" layoutY="491.0" prefHeight="33.0" prefWidth="246.0" promptText="Message Chatbot" />
+                  <Text layoutX="24.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If you have any questions, use our chatbot here" wrappingWidth="1765.0">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Text>
+                  <TextArea layoutX="25.0" layoutY="544.0" prefHeight="299.0" prefWidth="1765.0" />
                </children>
-            </VBox>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="sidebar1" layoutY="80.0" prefHeight="1000.0" prefWidth="80.0" style="-fx-background-color: #0069b3;">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="990.0" prefWidth="80.0" spacing="20.0" style="-fx-background-color: #0069b3;" AnchorPane.topAnchor="10.0">
+            </AnchorPane>
+            <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="86.0" prefWidth="1812.0" stylesheets="@menu.css">
+               <styleClass>
+                  <String fx:value="shadow" />
+                  <String fx:value="white-bg" />
+               </styleClass>
                <children>
-                  <Button fx:id="dashboardIcon" mnemonicParsing="false" onAction="#openDashboard" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
-                     <graphic>
-                        <FontAwesomeIcon fill="WHITE" glyphName="HOME" size="4em" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="dataTableIcon" layoutX="20.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
-                     <graphic>
-                        <FontAwesomeIcon fill="WHITE" glyphName="PENCIL" size="4em" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="AccountIcon" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
-                     <graphic>
-                        <FontAwesomeIcon fill="WHITE" glyphName="USER" size="4em" />
-                     </graphic>
-                  </Button>
+                  <Text layoutX="23.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Help and FAQs">
+                     <font>
+                        <Font size="50.0" />
+                     </font>
+                  </Text>
                </children>
-            </VBox>
-            <Button fx:id="logoutButton" alignment="CENTER" layoutX="12.0" layoutY="940.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;" textFill="#0598ff" AnchorPane.bottomAnchor="10.0">
-               <graphic>
-                  <FontAwesomeIcon fill="WHITE" glyphName="SIGN_OUT" size="4em" wrappingWidth="48.0" />
-               </graphic>
-            </Button>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

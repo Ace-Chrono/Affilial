@@ -168,6 +168,12 @@ public class MenuController implements Initializable{
     private TextField partnerNameField;
     
     @FXML
+    private AnchorPane helpPage;
+    
+    @FXML
+    private Button HelpIcon;
+    
+    @FXML
     private PasswordField passwordField;
 
     @FXML
@@ -705,6 +711,12 @@ public class MenuController implements Initializable{
                     e.printStackTrace();
                 }
             }
+            
+            try {
+                Runtime.getRuntime().exec("notepad.exe " + fileToSave.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
                 
 	        System.out.println("Report generated and saved to 'report.txt'");
 	            
@@ -778,7 +790,7 @@ public class MenuController implements Initializable{
                 }
             }
 
-            if (daysDifference >= 365) {
+            if (daysDifference >= 730) {
             	Map<String, Integer> yearCounts = new HashMap<>();
             	
             	try
@@ -830,7 +842,7 @@ public class MenuController implements Initializable{
             	chart.getData().clear();
             	chart.getData().addAll(dataList);
             } 
-            else if (daysDifference >= 90) {
+            else if (daysDifference >= 60) {
             	Map<String, Integer> monthCounts = new HashMap<>();
             	
             	try
@@ -1096,9 +1108,11 @@ public class MenuController implements Initializable{
 		dashboard.setVisible(false);
 		accountInfo.setVisible(false);
 		dataTable.setVisible(true);
+		helpPage.setVisible(false);
 		dashboard.setDisable(true);
 		accountInfo.setDisable(true);
 		dataTable.setDisable(false);
+		helpPage.setDisable(true);
 	}
 	
 	public void openAccountInfo(ActionEvent event)
@@ -1106,9 +1120,23 @@ public class MenuController implements Initializable{
 		dashboard.setVisible(false);
 		accountInfo.setVisible(true);
 		dataTable.setVisible(false);
+		helpPage.setVisible(false);
 		dashboard.setDisable(true);
 		accountInfo.setDisable(false);
 		dataTable.setDisable(true);
+		helpPage.setDisable(true);
+	}
+	
+	public void openHelpPage(ActionEvent event)
+	{
+		dashboard.setVisible(false);
+		accountInfo.setVisible(false);
+		dataTable.setVisible(false);
+		helpPage.setVisible(true);
+		dashboard.setDisable(true);
+		accountInfo.setDisable(true);
+		dataTable.setDisable(true);
+		helpPage.setDisable(false);
 	}
 
 	@Override
@@ -1116,9 +1144,11 @@ public class MenuController implements Initializable{
 		dashboard.setVisible(true);
 		accountInfo.setVisible(false);
 		dataTable.setVisible(false);
+		helpPage.setVisible(false);
 		dashboard.setDisable(false);
 		accountInfo.setDisable(true);
 		dataTable.setDisable(true);
+		helpPage.setDisable(true);
 		addPartnersShowListData();
 		homeDisplayTotalPartnersChart();
 		homeDisplayOrganizationTypeChart();
