@@ -7,6 +7,12 @@
 	-fx-background-radius:8px;
 }
 
+.outline{
+	-fx-border-color: grey;
+	-fx-border-radius: 8px;
+	-fx-border-width: 2px;
+}
+
 .chart-series-line{
 	-fx-stroke-width: 2px;
 	-fx-stroke: #0598ff;
