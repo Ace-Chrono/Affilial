@@ -27,6 +27,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -54,6 +57,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -70,9 +74,6 @@ public class MenuController implements Initializable{
 
     @FXML
     private AnchorPane accountInfo;
-
-    @FXML
-    private Button accountInfoButton;
 
     @FXML
     private Button addButton;
@@ -96,16 +97,10 @@ public class MenuController implements Initializable{
     private AnchorPane dashboard;
 
     @FXML
-    private Button dashboardButton;
-
-    @FXML
     private Button dashboardIcon;
 
     @FXML
     private AnchorPane dataTable;
-
-    @FXML
-    private Button dataTableButton;
 
     @FXML
     private Button dataTableIcon;
@@ -145,6 +140,9 @@ public class MenuController implements Initializable{
 
     @FXML
     private TextField mainContacterField;
+    
+    @FXML
+    private TextField messageChatbot;
 
     @FXML
     private TextField organizationTypeField;
@@ -181,12 +179,9 @@ public class MenuController implements Initializable{
 
     @FXML
     private AnchorPane sidebar1;
-
+    
     @FXML
-    private AnchorPane sidebar2;
-
-    @FXML
-    private Button sidebarButton;
+    private Button submitButton;
     
     @FXML
     private LineChart<String, Number> totalPartnersChart;
@@ -199,6 +194,9 @@ public class MenuController implements Initializable{
 
     @FXML
     private Label usernameLabel;
+    
+    @FXML
+    private TextArea responseOutput;
 
     private Connection connect;
     private PreparedStatement prepare;
@@ -724,6 +722,17 @@ public class MenuController implements Initializable{
     	       
     }
     
+    public void generateChatbotResponse()
+    {
+    	if (!messageChatbot.getText().isEmpty())
+    	{
+        	ChatLanguageModel model = OpenAiChatModel.withApiKey("demo");
+        	String response = model.generate(messageChatbot.getText());
+        	responseOutput.setText(response);
+    	}
+
+    }
+    
     public void homeDisplayTotalPartnersChart()
     {
     	totalPartnersChart.getData().clear();
@@ -1022,9 +1031,6 @@ public class MenuController implements Initializable{
 	private Scene scene;
 	private Parent root;
 	
-	private boolean sidebarOpen = false; 
-	private boolean inAnimation = false; 
-	
 	public void displayName(String username)
 	{
 		this.username = username;
@@ -1051,39 +1057,6 @@ public class MenuController implements Initializable{
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-		}
-	}
-	
-	public void sidebarExpandOrShrink(ActionEvent event)
-	{
-		if (sidebarOpen && !inAnimation)
-		{
-			inAnimation = true; 
-			
-			TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(0.25),sidebar2);
-			translateTransition1.setByX(-300);
-			translateTransition1.play();
-			
-			translateTransition1.setOnFinished(event1 ->{
-				sidebar2.setVisible(false);
-				sidebarOpen = false; 
-				inAnimation = false; 
-			});
-		}
-		else if (!inAnimation)
-		{
-			inAnimation = true; 
-			
-			sidebar2.setVisible(true);
-			
-			TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(0.25),sidebar2);
-			translateTransition1.setByX(+300);
-			translateTransition1.play();
-			
-			translateTransition1.setOnFinished(event1 ->{
-				sidebarOpen = true; 
-				inAnimation = false; 
-			});
 		}
 	}
 	

@@ -1,0 +1,6 @@
+application\LoginController.class
+application\Database.class
+application\Main.class
+module-info.class
+application\partnerData.class
+application\MenuController.class

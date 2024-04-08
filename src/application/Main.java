@@ -16,7 +16,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {

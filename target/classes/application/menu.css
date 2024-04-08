@@ -1,0 +1,22 @@
+.shadow{
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 6, 0, 0, 0);
+}
+
+.white-bg{
+	-fx-background-color:#fff;
+	-fx-background-radius:8px;
+}
+
+.chart-series-line{
+	-fx-stroke-width: 2px;
+	-fx-stroke: #0598ff;
+}
+.chart-line-symbol {
+    -fx-background-color: transparent;
+}
+
+.default-color0.chart-pie { -fx-pie-color: #0598ff; }
+.default-color1.chart-pie { -fx-pie-color: #0475c4; }
+.default-color2.chart-pie { -fx-pie-color: #03558f; }
+.default-color3.chart-pie { -fx-pie-color: #023a61; }
+.default-color4.chart-pie { -fx-pie-color: #01233b; }
