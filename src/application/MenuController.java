@@ -1065,9 +1065,11 @@ public class MenuController implements Initializable{
 		dashboard.setVisible(true);
 		accountInfo.setVisible(false);
 		dataTable.setVisible(false);
+		helpPage.setVisible(false);
 		dashboard.setDisable(false);
 		accountInfo.setDisable(true);
 		dataTable.setDisable(true);
+		helpPage.setDisable(true);
 		homeDisplayTotalPartnersChart();
 		homeDisplayOrganizationTypeChart();
 		homeDisplayPartnerAmount();
