@@ -1,4 +1,8 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-.root{
-	/*-fx-background-image: url("/Channel_Logo.jpg");*/
+.vbox_background_center{
+	-fx-background-image:url("f2ac81f39118c14d68c15fbbd253a40f.jpg");
+}
+
+.anchor{
+	-fx-background-image:url("White_background-transformed.jpeg");
 }

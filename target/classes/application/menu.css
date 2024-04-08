@@ -20,3 +20,15 @@
 .default-color2.chart-pie { -fx-pie-color: #03558f; }
 .default-color3.chart-pie { -fx-pie-color: #023a61; }
 .default-color4.chart-pie { -fx-pie-color: #01233b; }
+
+.vbox_background_center{
+	-fx-background-image:url("bar.jpg");
+}
+
+.vbox_background_left{
+	-fx-background-image:url("vertical.jpg");
+}
+
+.anchor{
+	-fx-background-image:url("White_background-transformed.jpeg");
+}

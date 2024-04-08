@@ -11,7 +11,7 @@
 
 <BorderPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
    <right>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0" styleClass="anchor" stylesheets="@login.css" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="loginButton" layoutX="102.0" layoutY="359.0" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: white; -fx-border-radius: 3; -fx-border-color: black;" text="Log In">
                <font>
@@ -39,14 +39,14 @@
       </AnchorPane>
    </right>
    <left>
-      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff;" styleClass="vbox_background_center" stylesheets="@login.css" BorderPane.alignment="CENTER">
          <children>
-            <Text fill="WHITE" layoutX="56.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partner and Affiliate Managing">
+            <Text fill="WHITE" layoutX="56.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partner and Affiliate Managing">
                <font>
                   <Font name="Agency FB" size="25.0" />
                </font>
             </Text>
-            <FontAwesomeIcon fill="WHITE" glyphName="USER" layoutX="128.0" layoutY="232.0" size="10em" />
+            <FontAwesomeIcon fill="WHITE" glyphName="USER" layoutX="128.0" layoutY="261.0" size="10em" />
          </children></AnchorPane>
    </left>
 </BorderPane>

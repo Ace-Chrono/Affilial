@@ -22,7 +22,7 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MenuController">
    <children>
-      <AnchorPane prefHeight="80.0" prefWidth="1920.0" style="-fx-background-color: #0598ff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane prefHeight="80.0" prefWidth="1920.0" style="-fx-background-color: #0598ff;" styleClass="vbox_background_center" stylesheets="@menu.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Label fx:id="usernameLabel" alignment="CENTER" layoutX="760.0" layoutY="12.0" prefHeight="58.0" prefWidth="400.0" text="Hello: User" textFill="WHITE">
                <font>
@@ -38,38 +38,38 @@
       </AnchorPane>
       <AnchorPane fx:id="sidebar1" layoutY="80.0" prefHeight="1000.0" prefWidth="80.0" style="-fx-background-color: #0069b3;">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="990.0" prefWidth="80.0" spacing="20.0" style="-fx-background-color: #0069b3;" AnchorPane.topAnchor="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="80.0" spacing="20.0" style="-fx-background-color: #0069b3;" styleClass="vbox_background_left" stylesheets="@menu.css" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="dashboardIcon" mnemonicParsing="false" onAction="#openDashboard" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                  <Button fx:id="dashboardIcon" mnemonicParsing="false" onAction="#openDashboard" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" translateY="10.0">
                      <graphic>
                         <FontAwesomeIcon fill="WHITE" glyphName="HOME" size="4em" />
                      </graphic>
                   </Button>
-                  <Button fx:id="dataTableIcon" layoutX="20.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                  <Button fx:id="dataTableIcon" layoutX="20.0" layoutY="10.0" mnemonicParsing="false" onAction="#openDataTable" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" translateY="10.0">
                      <graphic>
                         <FontAwesomeIcon fill="WHITE" glyphName="PENCIL" size="4em" />
                      </graphic>
                   </Button>
-                  <Button fx:id="AccountIcon" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                  <Button fx:id="AccountIcon" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" onAction="#openAccountInfo" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" translateY="10.0">
                      <graphic>
                         <FontAwesomeIcon fill="WHITE" glyphName="USER" size="4em" />
                      </graphic>
                   </Button>
-                  <Button fx:id="HelpIcon" layoutX="20.0" layoutY="170.0" mnemonicParsing="false" onAction="#openHelpPage" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;">
+                  <Button fx:id="HelpIcon" layoutX="20.0" layoutY="170.0" mnemonicParsing="false" onAction="#openHelpPage" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" translateY="10.0">
                      <graphic>
                         <FontAwesomeIcon fill="WHITE" glyphName="INFO" size="4em" />
                      </graphic>
                   </Button>
                </children>
             </VBox>
-            <Button fx:id="logoutButton" alignment="CENTER" layoutX="12.0" layoutY="940.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="61.0" style="-fx-background-color: #0069b3;" textFill="#0598ff" AnchorPane.bottomAnchor="10.0">
+            <Button fx:id="logoutButton" alignment="CENTER" layoutX="12.0" layoutY="940.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" textFill="#0598ff" translateX="-2.0" AnchorPane.bottomAnchor="10.0">
                <graphic>
-                  <FontAwesomeIcon fill="WHITE" glyphName="SIGN_OUT" size="4em" wrappingWidth="48.0" />
+                  <FontAwesomeIcon fill="WHITE" glyphName="SIGN_OUT" size="4em" translateX="-3.0" wrappingWidth="35.0" />
                </graphic>
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dashboard" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="dashboard" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" styleClass="anchor" stylesheets="@menu.css">
          <children>
             <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="975.0" prefWidth="1812.0" stylesheets="@menu.css">
                <styleClass>
@@ -144,7 +144,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataTable" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="dataTable" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" styleClass="anchor" stylesheets="@menu.css" visible="false">
          <children>
             <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="640.0" prefWidth="1812.0" stylesheets="@menu.css">
                <styleClass>
@@ -270,7 +270,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="accountInfo" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="accountInfo" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" styleClass="anchor" stylesheets="@menu.css" visible="false">
          <children>
             <AnchorPane layoutX="931.0" layoutY="118.0" prefHeight="868.0" prefWidth="895.0" stylesheets="@menu.css">
                <styleClass>
@@ -348,7 +348,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="helpPage" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="helpPage" layoutX="80.0" layoutY="80.0" prefHeight="1000.0" prefWidth="1840.0" style="-fx-background-color: white;" styleClass="anchor" stylesheets="@menu.css" visible="false">
          <children>
             <AnchorPane layoutX="14.0" layoutY="118.0" prefHeight="868.0" prefWidth="1812.0" stylesheets="@menu.css">
                <styleClass>
