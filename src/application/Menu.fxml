@@ -329,13 +329,19 @@
                         <Font name="Agency FB" size="35.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="usernameField" layoutX="32.0" layoutY="76.0" prefHeight="60.0" prefWidth="835.0" />
+                  <TextField fx:id="usernameField" layoutX="32.0" layoutY="76.0" prefHeight="60.0" prefWidth="835.0">
+                     <font>
+                        <Font name="Agency FB" size="35.0" />
+                     </font></TextField>
                   <Text layoutX="31.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
                      <font>
                         <Font name="Agency FB" size="35.0" />
                      </font>
                   </Text>
-                  <PasswordField fx:id="passwordField" layoutX="31.0" layoutY="218.0" prefHeight="60.0" prefWidth="835.0" />
+                  <PasswordField fx:id="passwordField" layoutX="31.0" layoutY="218.0" prefHeight="60.0" prefWidth="835.0">
+                     <font>
+                        <Font name="Agency FB" size="35.0" />
+                     </font></PasswordField>
                   <Button layoutX="787.0" layoutY="312.0" mnemonicParsing="false" onAction="#updateAccount" prefHeight="40.0" prefWidth="80.0" text="Submit">
                      <font>
                         <Font name="Agency FB" size="17.0" />

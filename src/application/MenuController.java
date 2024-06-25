@@ -2,6 +2,7 @@ package application;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -66,6 +67,20 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.awt.Desktop;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class MenuController implements Initializable{
 	
@@ -281,9 +296,10 @@ public class MenuController implements Initializable{
     	
     	connect = Database.connectDb();
     	
+		Alert alert;
+    	
     	try {
     		
-    		Alert alert;
     		if (partnerNameField.getText().isEmpty() || organizationTypeField.getText().isEmpty() ||
     				fundsAvailableField.getText().isEmpty() || employeesAvailableField.getText().isEmpty() ||
     				mainContacterField.getText().isEmpty() || contacterPhoneNumberField.getText().isEmpty() ||
@@ -377,7 +393,21 @@ public class MenuController implements Initializable{
     			}
     		}
     		
-    	}catch(Exception e) {e.printStackTrace();}
+    	}
+    	catch (SQLException e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An error occurred while updating partner information:\n" + e.getMessage());
+            alert.showAndWait();	
+    	}
+    	catch(Exception e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An unexpected error occurred:\n" + e.getMessage());
+            alert.showAndWait();
+    	}
     	
     }
     
@@ -409,6 +439,7 @@ public class MenuController implements Initializable{
     
     public void addPartnersUpdate()
     {
+    	//Sets string for SQL changes
     	String updateData = "UPDATE partners SET "
     			+ "partnerName = '" + partnerNameField.getText()
     			+ "', organizationType = '" + organizationTypeField.getText()
@@ -421,10 +452,10 @@ public class MenuController implements Initializable{
     			+ partnerDataTable.getSelectionModel().getSelectedItem().getPartnerName() + "'";
     	
     	connect = Database.connectDb();
+		Alert alert;
     	
     	try {
-    		Alert alert;
-    		
+    		//Checks for errors, whether input boxes are blank
     		if (partnerNameField.getText().isEmpty() || organizationTypeField.getText().isEmpty() ||
     				fundsAvailableField.getText().isEmpty() || employeesAvailableField.getText().isEmpty() ||
     				mainContacterField.getText().isEmpty() || contacterPhoneNumberField.getText().isEmpty() ||
@@ -438,6 +469,7 @@ public class MenuController implements Initializable{
     		}
     		else
     		{
+    			//Creates confirmation method for user
     			alert = new Alert(AlertType.CONFIRMATION);
     			alert.setTitle("Confirmation Message");
     			alert.setHeaderText(null);
@@ -455,18 +487,20 @@ public class MenuController implements Initializable{
                     while (result.next()) {
                         int partnerId = result.getInt("partnerId");
                         
-                        // Check if the newPartnerId already exists, if so, find the next available unique id
+                        //Check if the newPartnerId already exists, if so, find the next available unique id, 
+                        //often creates ID outside length of data table because we might change user order based on the update
                         while (isPartnerIdExists(newPartnerId, connect)) {
                             newPartnerId++;
                         }
 
+                        //Prepares the re-sorts SQL statement to reset the IDs
                         String reSort = "UPDATE partners SET partnerId = ? WHERE partnerId = ?";
                         prepare = connect.prepareStatement(reSort);
                         prepare.setInt(1, newPartnerId++);
                         prepare.setInt(2, partnerId);
                         prepare.executeUpdate();
                     }
-
+                    //Resorts the data, giving all partners the new IDs
                     result = statement.executeQuery(sortData);
                     newPartnerId = 1;
                     boolean fixBug = false;
@@ -488,6 +522,7 @@ public class MenuController implements Initializable{
                         }
                     }
         			
+                    //Alert message to say data is updated
         			alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Information Message");
         			alert.setHeaderText(null);
@@ -503,7 +538,21 @@ public class MenuController implements Initializable{
     			}
     		}
     		
-    	}catch(Exception e) {e.printStackTrace();}
+    	}
+    	catch (SQLException e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An error occurred while updating partner information:\n" + e.getMessage());
+            alert.showAndWait();	
+    	}
+    	catch(Exception e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An unexpected error occurred:\n" + e.getMessage());
+            alert.showAndWait();
+    	}
     	
     }
     
@@ -569,8 +618,10 @@ public class MenuController implements Initializable{
     {
     	FilteredList<partnerData> filter = new FilteredList<>(addPartnersListD, e-> true);
     	
+    	//Creates a listener that allows the computer to actively see what is being typed
     	searchButton.textProperty().addListener((Observable, oldValue, newValue) -> {
-    		filter.setPredicate(predicatePartnerData ->{
+    		//Checks each column to see if the searched term exists in there and makes a filtered list based on it
+    		filter.setPredicate(predicatePartnerData ->{ 
     			
     			if(newValue == null || newValue.isEmpty())
     				return true; 
@@ -598,6 +649,7 @@ public class MenuController implements Initializable{
     	SortedList<partnerData> sortList = new SortedList<>(filter);
     	
     	sortList.comparatorProperty().bind(partnerDataTable.comparatorProperty());
+    	//Displays the new filtered list in the data table
     	partnerDataTable.setItems(sortList);
 
     }
@@ -612,8 +664,9 @@ public class MenuController implements Initializable{
     	
     	connect = Database.connectDb();
     	
+    	Alert alert; 
+    	
     	try {
-    		Alert alert;
     		
     		if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty())
     		{
@@ -621,6 +674,14 @@ public class MenuController implements Initializable{
     			alert.setTitle("Error Message");
     			alert.setHeaderText(null);
     			alert.setContentText("Please fill in all blank fields");
+    			alert.showAndWait();
+    		}
+    		else if (!isStrong(passwordField.getText()))
+    		{
+    			alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Error Message");
+    			alert.setHeaderText(null);
+    			alert.setContentText("Ensure your password has at least one digit, one letter, one special character and is at least 6 digits long.");
     			alert.showAndWait();
     		}
     		else
@@ -651,10 +712,39 @@ public class MenuController implements Initializable{
     			}
     		}
     		
-    	}catch(Exception e) {e.printStackTrace();}
+    	}
+    	catch (SQLException e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An error occurred while updating partner information:\n" + e.getMessage());
+            alert.showAndWait();	
+    	}
+    	catch(Exception e) {
+    		alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An unexpected error occurred:\n" + e.getMessage());
+            alert.showAndWait();
+    	}
     	
     }
     
+    public static boolean isStrong(String password) {
+        // Define a regular expression pattern to match a strong password
+        String pattern = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!]).{6,}$";
+
+        // Compile the pattern into a regular expression
+        Pattern regex = Pattern.compile(pattern);
+
+        // Create a Matcher object to match the input password against the pattern
+        Matcher matcher = regex.matcher(password);
+
+        // Return true if the password matches the pattern, indicating it's strong enough
+        return matcher.matches();
+    }
+    
+/*
     public void generateReport() 
     {
     	String downloadData = "SELECT partnerId, partnerName, organizationType, fundsAvailable, employeesAvailable, mainContacter, contacterPhoneNumber, contacterEmail, dateJoined FROM partners";
@@ -720,6 +810,147 @@ public class MenuController implements Initializable{
 	            
 	    }catch(Exception e) {e.printStackTrace();}
     	       
+    }
+*/
+
+    public void generateReport() {
+        String downloadData = "SELECT partnerId, partnerName, organizationType, fundsAvailable, employeesAvailable, mainContacter, contacterPhoneNumber, contacterEmail, dateJoined FROM partners";
+
+        connect = Database.connectDb();
+        try {
+            statement = connect.createStatement();
+            result = statement.executeQuery(downloadData);
+
+            StringBuilder reportData = new StringBuilder();
+
+            // Process the result set and write the report to the file
+            while (result.next()) {
+                // Retrieve data from the result set
+                int column1Value = result.getInt("partnerId");
+                String column2Value = result.getString("partnerName");
+                String column3Value = result.getString("organizationType");
+                BigDecimal column4Value = result.getBigDecimal("fundsAvailable");
+                int column5Value = result.getInt("employeesAvailable");
+                String column6Value = result.getString("mainContacter");
+                String column7Value = result.getString("contacterPhoneNumber");
+                String column8Value = result.getString("contacterEmail");
+                String column9Value = result.getString("dateJoined");
+
+                reportData.append("Partner ID: ").append(column1Value).append("\n");
+                reportData.append("Partner Name: ").append(column2Value).append("\n");
+                reportData.append("Organization Type: ").append(column3Value).append("\n");
+                reportData.append("Funds Available: ").append(column4Value).append("\n");
+                reportData.append("Employees Available: ").append(column5Value).append("\n");
+                reportData.append("Main Contacter: ").append(column6Value).append("\n");
+                reportData.append("Contacter Phone Number: ").append(column7Value).append("\n");
+                reportData.append("Contacter Email: ").append(column8Value).append("\n");
+                reportData.append("Date Joined: ").append(column9Value).append("\n");
+                reportData.append("-----------------------------------\n");
+            }
+
+            // Save the report data to a temporary text file
+            File tempFile = File.createTempFile("report", ".txt");
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+                writer.write(reportData.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            Process notepadProcess = openInNotepad(tempFile);
+            
+            notepadProcess.waitFor();
+
+
+            // Prompt the user to choose the location and file type to save the final report
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Report");
+            fileChooser.setInitialFileName("report");
+            FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+            FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+            FileChooser.ExtensionFilter docxFilter = new FileChooser.ExtensionFilter("Word files (*.docx)", "*.docx");
+            fileChooser.getExtensionFilters().addAll(txtFilter, pdfFilter, docxFilter);
+            File fileToSave = fileChooser.showSaveDialog(null);
+
+            if (fileToSave != null) {
+                String extension = getFileExtension(fileToSave);
+                switch (extension) {
+                    case "txt":
+                        // Save as TXT
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+                            writer.write(reportData.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "pdf":
+                        // Save as PDF
+                        saveAsPdf(tempFile, fileToSave);
+                        break;
+                    case "docx":
+                        // Save as DOCX
+                        saveAsDocx(tempFile, fileToSave);
+                        break;
+                    default:
+                        System.out.println("Unsupported file type.");
+                }
+                System.out.println("Report saved to: " + fileToSave.getAbsolutePath());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private Process openInNotepad(File file) {
+        try {
+            return new ProcessBuilder("notepad.exe", file.getAbsolutePath()).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf + 1);
+    }
+
+    private void saveAsPdf(File sourceFile, File destFile) {
+        try {
+            Document pdfDoc = new Document();
+            PdfWriter.getInstance(pdfDoc, new FileOutputStream(destFile));
+            pdfDoc.open();
+            Scanner sc = new Scanner(sourceFile);
+            while (sc.hasNextLine()) {
+                pdfDoc.add(new Paragraph(sc.nextLine()));
+            }
+            pdfDoc.close();
+            sc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveAsDocx(File sourceFile, File destFile) {
+        try (XWPFDocument docxDoc = new XWPFDocument()) {
+            XWPFParagraph paragraph = docxDoc.createParagraph();
+            XWPFRun run = paragraph.createRun();
+            Scanner sc = new Scanner(sourceFile);
+            while (sc.hasNextLine()) {
+                run.setText(sc.nextLine());
+                run.addBreak();
+            }
+            try (FileOutputStream out = new FileOutputStream(destFile)) {
+                docxDoc.write(out);
+            }
+            sc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void generateChatbotResponse()
